@@ -66,10 +66,18 @@ class TCOD {
 
     }
     
-    ///display a random color on the screen
+    ///place a colored character on the screen. is that PC?
+    func putColorChar(x: Int32, y: Int32, char: String, color: TCOD_color_t)
+    {
+        let toBeSent = char.cString(using: .utf8)
+        TCOD_console_set_default_foreground(console, color)
+        TCOD_console_put_char(console, x, y,Int32(toBeSent![0]), bkgndf)
+    }
+    
+    ///display a char w/ random color on the screen
     func putRainbowChar(x: Int32, y: Int32, char: String) {
         let toBeSent = char.cString(using: .utf8)
-        print(toBeSent![0])
+        //print(toBeSent![0])
         TCOD_console_set_default_foreground(console, randColor())
         TCOD_console_put_char(console, x, y, Int32(toBeSent![0]), bkgndf)
     }
@@ -88,7 +96,7 @@ class TCOD {
     ///display a character on the screen
     func putChar(x: Int32, y: Int32, char: String) {
         let toBeSent = char.cString(using: .utf8)
-        print(toBeSent![0])
+        //print(toBeSent![0])
         TCOD_console_put_char(console, x, y, Int32(toBeSent![0]), bkgndf)
     }
     
@@ -109,6 +117,11 @@ class TCOD {
         }
     }
     
+    ///set the background color of a char/tile
+    func setCharBG(x: Int32, y: Int32, col: TCOD_color_t)
+    {
+        TCOD_console_set_char_background(console, x, y, col, TCOD_BKGND_SET)
+    }
     
     ///set the background color of the console
     func setConsoleBG(col: TCOD_color_t) {
@@ -129,9 +142,9 @@ class TCOD {
     }
     
     ///blit le console
-    func blit(xSrc: Int32, ySrc: Int32, wSrc: Int32, hSrc: Int32, xDst: Int32, yDst: Int32, fgalpha: Float, bgalpha: Float)
+    func blit(xScr: Int32, yScr: Int32, wScr: Int32, hScr: Int32, xDst: Int32, yDst: Int32, fgalpha: Float, bgalpha: Float)
     {
-        TCOD_console_blit(offscr_console, xSrc, ySrc, wSrc, hSrc, nil, xDst, yDst, fgalpha, bgalpha)
+        TCOD_console_blit(console, xScr, yScr, wScr, hScr, nil, xDst, yDst, fgalpha, bgalpha)
     }
     
     
@@ -202,11 +215,7 @@ class TCOD {
         TCOD_console_set_char_foreground(console, x,y, col)
     }
     
-    ///sets background color of tile
-    func setCharBG(x: Int32, y: Int32, col: TCOD_color_t)
-    {
-        TCOD_console_set_char_background(console, x, y, col, bkgndf)
-    }
+
     /*
     func setDefaultFG(col: OpaquePointer?) {
         TCOD_console_set_default_foreground(console, boogaloo)
@@ -260,14 +269,28 @@ class TCOD {
     func flush()
     {
         TCOD_console_flush()
+        
     }
 }
-    /*************************
-    *
-    * Welcome to pointer Hell.
-    **************************
-*/
- 
+/* I tried to do this differently, i tried a million ways */
+/* swift is really advanced and strong in some areas, but */
+/* it continues to suprise me with its odd quirks, especially when it comes*/
+/* to passing types and type conversions when dealing with C libraries */
+/* so all of the predefined colors in libtcod are useless to us */
+/* but we do still have the ability to create and define our own*/
+/* and that IS what this wrapper is all about, right? */
+
+    let stcodGreen = TCOD_ColorRGB(r: 0, g: 255, b: 0)
+    let stcodGrey = TCOD_ColorRGB(r: 128, g: 128, b: 128)
+    let stcodRed = TCOD_ColorRGB(r: 255, g: 0, b: 0)
+    let stcodBlue = TCOD_ColorRGB(r: 0, g: 0, b: 255)
+    let stcodYellow = TCOD_ColorRGB(r: 255, g: 255, b: 0)
+    let stcodPurple = TCOD_ColorRGB(r:128, g: 0, b: 128)
+    let stcodWhite = TCOD_ColorRGB(r: 255, g: 255, b: 255)
+    let stcodLime = TCOD_ColorRGB(r: 0,g: 255, b: 0)
+    let stcodFuscia = TCOD_ColorRGB(r: 255, g: 0, b: 255)
+
+
 class tcodbsp {
 
     let pos: Int32 = 0
