@@ -12,30 +12,39 @@ let tcod = TCOD()
 let title: String = "Swift Rogue Like Tutorial"
 let width: Int32 = 80
 let height: Int32 = 40
+let maxWidth: Int32 = 75
+let maxHeight: Int32 = 35
 tcod.initRoot(w: width, h: height, title: title)
 tcod.consoleClear()
-var playerx: Int32 = width / 2
-var playery: Int32 = height / 2
-tcod.putChar(x: playerx, y: playery, char: "@")
+let player = Entity(x: 33, y: 19, char: "@", color: stcodFuscia)
+let npc = Entity(x: (width / 2) - 5, y: (height / 2) - 1, char: "N", color: stcodBlue)
+var ents = [player, npc]
+let gameMap = GameMap(width: maxWidth, height: maxHeight)
+
+drawAll(ents: ents)
 tcod.flush()
 
-
+var retVal = [String:(Int32, Int32)]()
+var (chgx, chgy) = (Int32(0),Int32(0))
 while(tcod.windowisClosed() == false)
 {
     if (tcod.chkKeypress()) {
-       
-        switch (tcod.key.vk) {
-        case TCODK_UP:
-            playery -= 1; tcod.consoleClear()
-        case TCODK_DOWN:
-            playery += 1; tcod.consoleClear()
-        case TCODK_LEFT:
-            playerx -= 1; tcod.consoleClear()
-        case TCODK_RIGHT:
-            playerx += 1; tcod.consoleClear()
-        default: if (true) { }
+        retVal = keyReader()
+        for key in retVal.keys {
+            if key == "move" {
+                (chgx, chgy) = retVal["move"] ?? (0,0)
+                if gameMap.is_blocked(x: player.px + chgx, y: player.py + chgy) == false {
+                    player.move(x: chgx, y: chgy)
+                }
+            }
+            if key == "exit" {
+                tcod.quit()
+                exit(0)
+            }
         }
-        tcod.putChar(x: playerx, y: playery, char: "@")
-        tcod.flush()
     }
+    drawAll(ents: ents)
+    tcod.flush()
+    clearAll(ents: ents)
+    
 }
