@@ -1,0 +1,6 @@
+I decided that i wanted to simultaneously develop a RogueLike in C++ using BearLibTerminal during
+the Roguelike dev codealong, so i put this together after dinner tonight. it's at the same
+stage of development as the swift versionk, all be it a touch buggier (imagine that...) and 
+the tunnel/room laying algorithim isnt running as nicely in c++, though i had to change
+several things to make it work AT ALL. gonna read up on a couple more proc gen algo's and perhaps
+give them a whirl tonight.
