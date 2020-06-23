@@ -1,3 +1,4 @@
+
 class Entity {
     public:
     int px,py;
@@ -15,10 +16,10 @@ Entity::Entity(int x, int y, char ch)
 
 void Entity::move(int x, int y)
 {
-    terminal_layer(1);
-    terminal_print(px, py, " ");
-    px += x;
-    py += y;
-    terminal_color("purple");
-    terminal_print(px, py, "@");
+      terminal_layer(1);
+      terminal_print(px, py, " ");
+      px += x;
+      py += y;
+      terminal_color("purple");
+      terminal_print(px, py, "@"); 
 }

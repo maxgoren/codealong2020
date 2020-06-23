@@ -9,9 +9,9 @@
 #define MAXH 40
 using namespace std;
 
- Entity player(5, 5, '@');
- gameMap gmap(MAXW - 4, MAXH);
-
+ 
+gameMap gmap(MAXW - 4, MAXH);
+Entity player(5, 5, '@');
 
 
 
