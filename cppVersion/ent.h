@@ -1,25 +1,12 @@
-
-class Entity {
-    public:
-    int px,py;
-    char ch;
-    void move(int x, int y);
-    Entity(int x, int y, char ch);
+class ent {
+public:
+ Point pos;
+ char sym[2];
+ color_t col;
+ std::string name;
+ direction dir;
+ void render();
+ void kick(Map, std::vector<std::string>*);
+ void move(Map, int, int);
+ ent(int x, int y, std::string name, char ch, color_t col);
 };
-
-Entity::Entity(int x, int y, char ch)
-{
-    px = x;
-    py = y;
-    ch = ch;
-}
-
-void Entity::move(int x, int y)
-{
-      terminal_layer(1);
-      terminal_print(px, py, " ");
-      px += x;
-      py += y;
-      terminal_color("purple");
-      terminal_print(px, py, "@"); 
-}

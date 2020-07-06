@@ -1,68 +1,93 @@
-#include "BearLibTerminal.h"
-#include "map.h"
-#include <iostream>
-void drawAll(Map dungeon)
-{
-	int x, y;
-terminal_layer(1);
-for (y = 5; y < 40; y++) {
-	for (x = 0; x < 70; x++) {
-			if (dungeon.layout[x][y].blocking == false)
-			{
-				terminal_color("darker red");
-				terminal_print(x , y, ".");
-				
-			}
-			if (dungeon.layout[x][y].borders == true) {
-				terminal_color("dark grey");
-				terminal_print(x, y, "#");
-			}
+#include "master.h"
 
-			}
-		}
+void drawAll(Map map)
+{
+int x, y, sx, sy;
+char marker[20];
+int offsetY = 6;
+int offsetX = 1;
+for (sx = offsetX; sx < offsetX + map.width; sx++)
+{
+   x = sx - offsetX;
+   for (sy = offsetY; sy < offsetY + map.height; sy++)
+   {
+    y = sy - offsetY;
+    if (map.layout[x][y].blocks == false)
+    {
+     //sprintf(marker, "%d", map.layout[x][y].isinRoom);
+     terminal_layer(0);
+     terminal_bkcolor("#add8e6");
+     terminal_color("flame");
+     terminal_print(sx, sy, " ");
+   } else {
+     terminal_bkcolor("black");
+     terminal_color("dark grey");
+     terminal_print(sx , sy, " ");
+   }
+   if (map.layout[x][y].border == true)
+   {
+    terminal_layer(1);
+    terminal_color("dark grey");
+    terminal_print(sx, sy, "X");
+   }
+   terminal_layer(2);
+   for (auto m = map.badGuys.begin(); m != map.badGuys.end(); m++)
+   {
+    terminal_color(m->col);
+     m->render();
+   }
+  }
+ }
+terminal_layer(0);
+terminal_bkcolor("#cecece");
+terminal_print(1,6, " ");
 }
 
-void gameLoop() {
-	Map dungeon(40, 70);
-	drawAll(dungeon);
-	int key,playerx = 7,playery = 7;
-	while ((key = terminal_read()) != TK_Q) {
-		switch (key) {
-		case TK_UP:
-			playery--;
-			break;
-		case TK_DOWN:
-			playery++;
-			break;
-		case TK_RIGHT:
-			playerx++;
-			break;
-		case TK_LEFT:
-			playerx--;
-			break;
-		default:
-			break;
-		}
-		terminal_clear();
-		drawAll(dungeon);
-		terminal_layer(2);
-		terminal_print(playerx, playery, "@");
-		terminal_refresh();
-	}
+void handle_keys(int k, ent* player, Map* map, std::vector<std::string>* gamelog)
+{
+  switch (k) {
+  	case TK_UP:
+  	 player->move(*map, 0, -1); player->dir = North;
+  	 break;
+  	case TK_DOWN:
+  	 player->move(*map, 0, 1); player->dir = South;
+  	 break;
+  	case TK_LEFT:
+  	 player->move(*map, -1, 0); player->dir = West;
+  	 break;
+  	case TK_RIGHT:
+  	 player->move(*map, 1, 0); player->dir = East;
+  	 break;
+	case TK_K:
+	 player->kick(*map, gamelog);
+  	default: break;
+  }
 }
 
-
-int main(int argc, char *argv[])
-{
-	
-	srand(time(NULL));
-	terminal_open();
-	terminal_set("window: title='BearLib C++ tutorial', size=80x40");
-	terminal_layer(1);
-	terminal_print(20, 20, "Hello, World!");
-	terminal_print(7, 7, "@");
-	terminal_refresh();
-	gameLoop();
-	terminal_close();
-	return 0;
+int main() {
+ int k;
+ std::vector<std::string> gamelog;
+ Map map(80,40);
+ Gui gui(6, 1, 80, 40, 100, 45); 
+ terminal_open();
+ terminal_set("window: size=100x45");
+  gui.drawGui(&gamelog);
+  map.genRect(11, 12);
+  ent player(map.spx, map.spy,"aT", '@', color_from_name("magenta"));
+  map.spawnMonsters(13);
+  drawAll(map);
+  player.render();
+   terminal_refresh();
+ while((k = terminal_read()) != TK_Q)
+  {
+   handle_keys(k, &player, &map, &gamelog);
+   terminal_clear();
+   player.render();
+   drawAll(map);
+   gui.drawGui(&gamelog);
+  drawAll(map);
+   terminal_refresh();
+  }
+  terminal_close;
+  return 0;
 }

@@ -1,29 +1,27 @@
-#include <cstdlib>
-//helpers.h (c) 2020 max goren
-//functions to make life easier in c/c++
-//returns smaller number
-int min(int a, int b)
+int getrand(int min, int max)
 {
-  if (a < b) {
-     return a;
-  } else{
-     return b;
-  }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distrib(min, max);
+    return distrib(gen);
 }
 
-//returns bigger number
-int max(int a, int b)
+int min(int a, int b)
 {
-  if (a > b) {
+  if (a < b)
+  {
     return a;
   } else {
     return b;
   }
 }
 
-
-//random number in range.
-int getrand(int min, int max)
+int max(int a, int b)
 {
-  return (rand() % (max - min + 1)) + min;
+  if (a > b)
+  {
+    return a;
+  } else {
+    return b;
+  }
 }

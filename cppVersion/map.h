@@ -1,35 +1,64 @@
+#include <tuple>
+enum direction {
+ North,
+ South,
+ East,
+ West
+};
 
-#include <vector>
+struct Point {
+ int x;
+ int y;
+ bool operator==(const Point& other) const {
+  return x == other.x && y ==other.y;
+ }
+};
 
-class Tile {
-public:
-    bool blocking;
-    bool borders;
-    Tile() : blocking(true), borders(false) {}
+/*struct Pool {
+  Point uL;
+  char piece[4][4];
+  piece[0][0]=' ';piece[0][1]='-';piece[0][2]='-';piece[0][3]=' ';  //  --
+  piece[1][0]='|';piece[1][1]='~';piece[1][2]='~';piece[1][3]='|'; //  |~~|
+  piece[2][0]='|';piece[2][1]='~';piece[2][2]='~';piece[2][3]='|';  // |~~|
+  piece[3][0]=' ';piece[3][1]='-';piece[3][2]='-';piece[3][3]=' ';   // --
+};*/
+
+struct Tiles {
+ Point pos;
+ int isinRoom = 0;
+ bool populated = false;
+ bool blocks = true;
+ bool border = false;
 };
 
 class Rect {
 public:
-    int x1, x2;
-    int y1, y2;
-    int w, h;
-    int cx, cy;
-    bool collides(Rect other);
-    Rect(int x, int y, int w, int h);
+ Point uL;
+ Point lR;
+ Point cent;
+ int width;
+ int height;
+ int idNum;
+ int numEnts = 0;
+ bool collision(Rect other);
+ Rect(int x, int y, int w, int h);
+ Rect();
 };
 
 class Map {
 public:
-    int mapHeight;
-    int mapWidth;
-    int maxRooms;
-    Tile layout[80][40];
-    std::vector<Rect> rooms;
-    void makeRoom(std::vector<Rect> rooms);
-    void carveRoom(Rect room);
-    void vDigDig(int start, int stop, int y);
-    void hDigDig(int star, int stop, int x);
-    void cleanUp();
-    Map(int mh, int mw);
+ int spx, spy;
+ int width;
+ int height;
+ Tiles layout[80][40];
+ std::vector<Rect> scrSect;
+ std::vector<Rect> rooms;
+ std::vector<ent> badGuys;
+ void digRect(Rect room);
+ void genRect(int numRoom, int maxSize);
+ void connectRooms(std::vector<Rect>);
+ void connectRooms2(std::vector<Rect>);
+ void outline();
+ void spawnMonsters(int);
+ Map (int w, int h);
 };
-
