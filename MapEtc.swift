@@ -15,6 +15,7 @@ struct Rectangle {
     let y2: Int32
     var centX: Int32
     var centY: Int32
+    var numEnts = 0
     init(x: Int32, y: Int32, width: Int32, height: Int32)
     {
         self.x1 = x
@@ -43,8 +44,10 @@ struct Tile {
     var blocked: Bool
     var blockSight: Bool
     var explored: Bool
+    var populated: Bool
     init(_ blocked: Bool, _ block_sight: Bool, _ explored: Bool)
     {
+        self.populated = false
         self.blocked = blocked
         self.blockSight = block_sight
         self.explored = explored
@@ -56,6 +59,7 @@ class GameMap {
     let mapheight: Int32
     var tiles = [[Tile]]()
     var rooms = [Rectangle]()
+    var monsters = [Entity]()
     var numRooms: Int
     var newX: Int32, newY: Int32, prevX: Int32, prevY: Int32
     init(mwidth: Int32, mheight: Int32)
@@ -125,7 +129,7 @@ class GameMap {
             let h = tcod.getRandInt(min: Int(roomMinSize), max: Int(roomMaxSize))
             let x = tcod.getRandInt(min: 0, max: Int(self.mapwidth) - w - 1)
             let y = tcod.getRandInt(min: 0, max: Int(self.mapheight) - h - 1)
-            let newRoom = Rectangle(x: Int32(x), y: Int32(y), width: Int32(w), height: Int32(h))
+            var newRoom = Rectangle(x: Int32(x), y: Int32(y), width: Int32(w), height: Int32(h))
             if (numRooms == 0) {
                 self.makeRoom(dim: newRoom); rooms.append(newRoom); numRooms += 1
                 
@@ -149,19 +153,37 @@ class GameMap {
                         self.makeHtunnel(x1: self.prevX, x2: self.newX, y: self.newY)
                     }
                 }
+                while (newRoom.numEnts < tcod.getRandInt(min: 1, max: 3))
+                {
+                   if (tcod.getRandom(high:10, low: 1) > 5)
+                   {
+                     placeMonster(Room: newRoom, type: "Orc")
+                     newRoom.numEnts += 1;
+                   } else {
+                     placeMonster(Room: newRoom, type: "Goblin")
+                     newRoom.numEnts += 1;
+                  }
+                }
                 rooms.append(newRoom)
                 if numRooms == 7 { (player.px, player.py) = newRoom.center() }
                 numRooms += 1
             }
         }
 }
+    func placeMonster(Room: Rectangle, type: String) {
+            let posx = tcod.getRandom(high: max(Room.x1, Room.x2), low: min(Room.x1, Room.x2))
+            let posy = tcod.getRandom(high: max(Room.y1, Room.y2), low: min(Room.y1, Room.y2))
+            if self.is_populated(x: posx, y: posy) == false && self.is_blocked(x: posx, y: posy) == false {
+                self.monsters.append(Entity(x: posx, y: posy, char: String(type.prefix(1)), name: type, color: stcodRed))
+        }
+    }
     
+    func is_populated(x: Int32, y: Int32) -> Bool {
+        return self.tiles[Int(x)][Int(y)].populated
+    }
     //returns the blocking state of the tile queried
     func is_blocked(x: Int32, y: Int32) -> Bool {
-        if self.tiles[Int(x)][Int(y)].blocked == true {
-            return true
-        }
-        return false
+        return self.tiles[Int(x)][Int(y)].blocked
     }
    
 }

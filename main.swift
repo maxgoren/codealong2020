@@ -18,20 +18,19 @@ let roomMaxSize: Int32 = 12 //largest diameter a room can be
 let roomMinSize: Int32 = 6 // smallest "      "
 let maxRooms = 20        //max number of rooms for our makeMap algo
 let fovAlgo: UInt32 = 2          //libtcod offers several different fov algo's
-let fovLitWalls = 0
+let fovLitWalls = 1
 let fovRad = 20
 var fovRecompute: Bool = true;
 
 tcod.initRoot(w: width, h: height, title: title)
 
-let player = Entity(x: (width / 2), y: (height / 2), char: "@", color: stcodFuscia)
-let npc = Entity(x: (width / 2) - 5, y: (height / 2) - 1, char: "N", color: stcodBlue)
-var ents = [player, npc]
+let player = Entity(x: (width / 2), y: (height / 2), char: "@", name: "aT", color: stcodFuscia)
 var gameMap = GameMap(mwidth: maxWidth, mheight: maxHeight)
+gameMap.monsters.append(player)
 var fovMap = tcodmap(w: gameMap.mapwidth, h: gameMap.mapheight, algo: fovAlgo)
 
 gameMap.makeMap()
-drawAll(ents: ents)
+drawAll(ents: gameMap.monsters)
 tcod.flush()
 
 let _ = gameLoop()

@@ -35,10 +35,10 @@ func gameLoop() -> Int
             }
         }
         if fovRecompute { fovMap.computeFov(playerx: player.px, playery: player.py, rad: 10, lwalls: true) }
-        drawAll(ents: ents)
+        drawAll(ents: gameMap.monsters)
         fovRecompute = false
         tcod.flush()
-        clearAll(ents: ents)
+        clearAll(ents: gameMap.monsters)
         tcod.consoleClear()
         }
     }
