@@ -1,3 +1,4 @@
+
   
 /****************************************************************
 *  MIT License
@@ -22,32 +23,25 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 ***************************************************/
-#include <iostream>
-#include <vector>
-#include <random>
-#include <list>
-#include <tuple>
-#include <map>
-#include <chrono>
-#include <thread>
-#include <cassert>
-#include <string>
-#include "BearLibTerminal.h"
-#include "helpers.h"
-#ifndef ent_h
-#define ent_h
- class Map;
- class Items;
- class ent;
-#endif
 
-#include "map.h"
-#include "gui.h"
-#include "ent.h"
-#include "ai.h"
-#include "items.h"
-#include "ent.cpp"
-#include "map.cpp"
-#include "gui.cpp"
-#include "ai.cpp"
-#include "items.cpp"
+Items::Items(int x, int y, std::string Name, float h, float p)
+{
+  this->name = Name;
+  this->heals = h;
+  this->powers = p;
+  this->pos.x = x; 
+  this->pos.y = y; 
+}
+Items::Items() { }
+
+Items::~Items()
+{
+    std::cout<<"another "<<this->name<<" bites the dust.\n";
+}
+
+void Items::render()
+{
+    terminal_layer(3);
+    terminal_color(color_from_argb(255,255,0,0));
+    terminal_print(this->pos.x, this->pos.y + 10, "%");
+}

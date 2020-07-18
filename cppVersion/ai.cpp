@@ -22,32 +22,43 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 ***************************************************/
-#include <iostream>
-#include <vector>
-#include <random>
-#include <list>
-#include <tuple>
-#include <map>
-#include <chrono>
-#include <thread>
-#include <cassert>
-#include <string>
-#include "BearLibTerminal.h"
-#include "helpers.h"
-#ifndef ent_h
-#define ent_h
- class Map;
- class Items;
- class ent;
-#endif
+ai::ai()
+{
 
-#include "map.h"
-#include "gui.h"
-#include "ent.h"
-#include "ai.h"
-#include "items.h"
-#include "ent.cpp"
-#include "map.cpp"
-#include "gui.cpp"
-#include "ai.cpp"
-#include "items.cpp"
+}
+/*
+bool ai::canAttack(Map* map, Point* playerPos)
+{
+
+}*/
+bool ai::canMove(Map* map, int pX, int pY) {
+ if (map->layout[pX][pY].blocks)
+ {
+     return false;
+ } else {
+     return true;
+ }
+}
+void ai::moveMonsters(Map* map, Point* playerPos)
+{
+int dx,dy;
+int dis;
+float dist;
+  for (auto M : map->badGuys)
+  {
+    dx = M->pos.x - playerPos->x;
+    dy = M->pos.y - playerPos->y;
+    dist = sqrtf(pow(dx,2)+pow(dy,2));
+    dx = (int)round(dx/dist);
+    dy = (int)round(dy/dist);
+    if (canMove(map, M->pos.x + dx, M->pos.y + dy))
+    {
+      map->layout[M->pos.x][M->pos.y].populated = false;
+      map->layout[M->pos.x][M->pos.y].blocks = false;
+      M->pos.x += dx;
+      M->pos.y += dy;
+      map->layout[M->pos.x][M->pos.y].blocks = true;
+      map->layout[M->pos.x][M->pos.y].populated = true;
+    }
+  } 
+}

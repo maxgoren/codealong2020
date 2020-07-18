@@ -6,6 +6,14 @@ int getrand(int min, int max)
     return distrib(gen);
 }
 
+double getrandfloat(double min, double max)
+{
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<double> distrib(min, max);
+  return distrib(gen);
+}
+
 int min(int a, int b)
 {
   if (a < b)

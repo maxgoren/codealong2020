@@ -22,32 +22,11 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 ***************************************************/
-#include <iostream>
-#include <vector>
-#include <random>
-#include <list>
-#include <tuple>
-#include <map>
-#include <chrono>
-#include <thread>
-#include <cassert>
-#include <string>
-#include "BearLibTerminal.h"
-#include "helpers.h"
-#ifndef ent_h
-#define ent_h
- class Map;
- class Items;
- class ent;
-#endif
-
-#include "map.h"
-#include "gui.h"
-#include "ent.h"
-#include "ai.h"
-#include "items.h"
-#include "ent.cpp"
-#include "map.cpp"
-#include "gui.cpp"
-#include "ai.cpp"
-#include "items.cpp"
+class ai {
+    std::list<ent*> closest;
+    public:
+    void canAttack(Map*,Point*);
+    void moveMonsters(Map*, Point*);
+    bool canMove(Map*, int pX, int pY);
+    ai();
+};
