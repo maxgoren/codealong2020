@@ -1,4 +1,3 @@
-  
 /****************************************************************
 *  MIT License
 * 
@@ -23,31 +22,47 @@
 * SOFTWARE.
 ***************************************************/
 #include <iostream>
-#include <vector>
-#include <random>
-#include <list>
-#include <tuple>
-#include <map>
+#include <algorithm>
+#include <unordered_map>
 #include <chrono>
+#include <vector>
+#include <array>
+#include <list>
+#include <queue>
+#include <map>
+#include <random>
 #include <thread>
-#include <cassert>
-#include <string>
+#include <math.h>
 #include "BearLibTerminal.h"
+#include "queue.h"
 #include "helpers.h"
-#ifndef ent_h
-#define ent_h
- class Map;
- class Items;
- class ent;
+#ifndef engine_h
+#define engine_h
+class Battle;
+class Gui;
+class ent;
+class engine;
 #endif
-
-#include "map.h"
+#ifndef dungeon_h 
+#define dungeon_h
+class item;
+class ent;
+class dungeon;
+#endif
+#include "dungeon.h"
+#include "entity.h"
+#include "djik.h"
+#include "bfirst.h"
+#include "engine.h"
 #include "gui.h"
-#include "ent.h"
-#include "ai.h"
 #include "items.h"
-#include "ent.cpp"
-#include "map.cpp"
-#include "gui.cpp"
-#include "ai.cpp"
+#include "battle.h"
+#include "dungeon.cpp"
+#include "roomconnecter.cpp"
+#include "djik.cpp"
+#include "bfirst.cpp"
+#include "battle.cpp"
+#include "engine.cpp"
 #include "items.cpp"
+#include "entity.cpp"
+#include "gui.cpp"

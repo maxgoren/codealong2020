@@ -1,5 +1,3 @@
-
-  
 /****************************************************************
 *  MIT License
 * 
@@ -24,24 +22,19 @@
 * SOFTWARE.
 ***************************************************/
 
-Items::Items(int x, int y, std::string Name, float h, float p)
-{
-  this->name = Name;
-  this->heals = h;
-  this->powers = p;
-  this->pos.x = x; 
-  this->pos.y = y; 
-}
-Items::Items() { }
 
-Items::~Items()
+
+item::item(Point loc)
 {
-    std::cout<<"another "<<this->name<<" bites the dust.\n";
+    this->name = this->itemList.getRandItem();
+    this->pos = loc;
+    this->pos.x = loc.x;
+    this->pos.y = loc.y;
 }
 
-void Items::render()
+void item::render()
 {
-    terminal_layer(3);
-    terminal_color(color_from_argb(255,255,0,0));
-    terminal_print(this->pos.x, this->pos.y + 10, "%");
+    terminal_layer(4);
+    terminal_color("magenta");
+    terminal_print(pos.x+1, pos.y+1, "&");
 }

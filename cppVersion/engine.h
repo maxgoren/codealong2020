@@ -1,4 +1,3 @@
-  
 /****************************************************************
 *  MIT License
 * 
@@ -23,27 +22,31 @@
 * SOFTWARE.
 ***************************************************/
 
-class Gui {
-private:
-std::chrono::time_point<std::chrono::high_resolution_clock> timeStart;
-public:
-struct GameTime {
-    int min;
-    int sec;
-} GameTime;
-int scrW, scrH;
-int mapW, mapH;
-int mapX, mapY;
-Point mouse;
-std::vector<std::string> gamelog;
-float elapsedTime();
-void fetchTime();
-void timeInfo();
-void drawGui(ent* player, dungeon* map, std::vector<ent*> badGuys);
-void banner();
-int itemMenu();
-void healthBar(ent* player);
-void showInventory(ent* player, dungeon* map, std::map<std::string,std::string> box);
-void fade(int x, int y,int start[3], int fin[3], std::string message); //char *message);
-Gui(int, int, int, int, int, int);
+class engine {
+   public:
+    enum GameStatus {
+       GAMESTART,
+       IDLE,
+       NEW_TURN,
+       VICTORY,
+       GAMEOVER
+    } gameStatus;
+    Gui* gui;
+    dungeon* map;
+    Battle* deathmatch;
+    ent* me;
+    dijk* ai;
+    std::vector<Point*> walkable;
+    std::vector<ent*> goblins;
+    std::vector<item*> booty;
+    std::vector<Point> path;
+    std::queue<std::tuple<ent*,Point, std::queue<Point>> > guiding_light;
+    void dispatch();
+    void knowledgeBase();
+    void fillMap();
+    void newLevel(int, int);
+    void update();
+    bool assigned(Point dest);
+    std::tuple<ent*,Point,std::queue<Point> >  goblinFoundItem(ent*);
+    engine();
 };
